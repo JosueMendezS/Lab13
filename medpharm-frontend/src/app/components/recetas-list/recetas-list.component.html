@@ -1,1 +1,68 @@
-<p>recetas-list works!</p>
+<div class="container">
+    <header>
+        <h1>Recetas</h1>
+        <div class="actions">
+            <span class="user">{{ auth.user()?.username }} ({{ auth.user()?.rol }})</span>
+            @if (auth.user()?.rol === 'MEDICO') {
+            <button class="btn primary" (click)="nueva()">+ Nueva receta</button>
+            }
+            <button class="btn" (click)="logout()">Salir</button>
+        </div>
+    </header>
+
+    <div class="filtros">
+        @for (f of filtros; track f) {
+        <button class="chip" [class.active]="filtro() === f" (click)="filtro.set(f)">{{ f }}</button>
+        }
+    </div>
+
+    @if (errorMsg()) {
+    <div class="alert">{{ errorMsg() }}</div>
+    }
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else {
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Fecha</th>
+                    <th>Medicamentos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (r of recetasFiltradas(); track r.id) {
+                <tr>
+                    <td>{{ r.codigoReceta }}</td>
+                    <td>{{ r.pacienteNombre }}</td>
+                    <td>{{ r.medicoNombre }}</td>
+                    <td>{{ r.fechaEmision | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                        @for (d of r.detalles; track $index) {
+                        <div>{{ d.medicamentoNombre }} x{{ d.cantidad }}</div>
+                        }
+                    </td>
+                    <td><span class="badge" [class]="r.estado.toLowerCase()">{{ r.estado }}</span></td>
+                    <td>
+                        @if (r.estado === 'PENDIENTE') {
+                        <button class="btn ok" (click)="cambiarEstado(r, 'DESPACHADA')">Despachar</button>
+                        <button class="btn danger" (click)="cambiarEstado(r, 'CANCELADA')">Cancelar</button>
+                        }
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="7" class="empty">No hay recetas para mostrar</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

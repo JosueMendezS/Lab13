@@ -1,0 +1,15 @@
+﻿.container { max-width: 900px; margin: 0 auto; padding: 1.5rem; font-family: system-ui, sans-serif; }
+label { display: block; font-weight: 600; font-size: .85rem; margin: .6rem 0 .2rem; }
+input, select { padding: .5rem; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%; box-sizing: border-box; }
+input.ng-invalid.ng-touched, select.ng-invalid.ng-touched { border-color: #dc2626; }
+.renglon { display: flex; gap: .8rem; align-items: flex-start; padding: .8rem; margin-bottom: .6rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; flex-wrap: wrap; }
+.campo { flex: 1; min-width: 150px; }
+.campo.grande { flex: 2; min-width: 220px; }
+.renglon .btn { margin-top: 1.7rem; }
+.error { color: #dc2626; display: block; }
+.alert { background: #fee2e2; color: #991b1b; padding: .6rem; border-radius: 6px; margin: .8rem 0; }
+.acciones { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1rem; }
+.btn { padding: .5rem 1rem; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; cursor: pointer; }
+.btn.primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+.btn.danger { background: #dc2626; color: #fff; border-color: #dc2626; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }

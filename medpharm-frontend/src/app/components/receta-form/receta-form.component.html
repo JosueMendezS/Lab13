@@ -1,1 +1,70 @@
-<p>receta-form works!</p>
+﻿<div class="container">
+  <h1>Nueva receta</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label for="paciente">Paciente</label>
+    <input id="paciente" type="text" formControlName="pacienteNombre" />
+    @if (pacienteNombre.touched && pacienteNombre.hasError('required')) {
+      <small class="error">El nombre del paciente es requerido</small>
+    }
+    @if (pacienteNombre.touched && pacienteNombre.hasError('minlength')) {
+      <small class="error">Mínimo 5 caracteres</small>
+    }
+
+    <h2>Medicamentos</h2>
+
+    <div formArrayName="detalles">
+      @for (d of detalles.controls; track $index) {
+        <div class="renglon" [formGroupName]="$index">
+          <div class="campo">
+            <label>Medicamento</label>
+            <select formControlName="medicamentoId">
+              <option [ngValue]="0" disabled>Seleccione...</option>
+              @for (m of medicamentos(); track m.id) {
+                <option [ngValue]="m.id">{{ m.nombre }} (stock: {{ m.stock }})</option>
+              }
+            </select>
+            @if (d.get('medicamentoId')?.touched && d.get('medicamentoId')?.invalid) {
+              <small class="error">Seleccione un medicamento</small>
+            }
+          </div>
+
+          <div class="campo">
+            <label>Cantidad</label>
+            <input type="number" formControlName="cantidad" />
+            @if (d.get('cantidad')?.touched && d.get('cantidad')?.hasError('required')) {
+              <small class="error">La cantidad es requerida</small>
+            }
+            @if (d.get('cantidad')?.touched && d.get('cantidad')?.hasError('positivo')) {
+              <small class="error">Debe ser un entero mayor a 0</small>
+            }
+          </div>
+
+          <div class="campo grande">
+            <label>Dosis indicada</label>
+            <input type="text" formControlName="dosisIndicada" />
+            @if (d.get('dosisIndicada')?.touched && d.get('dosisIndicada')?.invalid) {
+              <small class="error">La dosis es requerida</small>
+            }
+          </div>
+
+          <button type="button" class="btn danger" (click)="quitarDetalle($index)"
+                  [disabled]="detalles.length === 1">Quitar</button>
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn" (click)="agregarDetalle()">+ Agregar medicamento</button>
+
+    @if (errorMsg()) {
+      <div class="alert">{{ errorMsg() }}</div>
+    }
+
+    <div class="acciones">
+      <button type="button" class="btn" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="btn primary" [disabled]="saving()">
+        {{ saving() ? 'Guardando...' : 'Guardar receta' }}
+      </button>
+    </div>
+  </form>
+</div>
